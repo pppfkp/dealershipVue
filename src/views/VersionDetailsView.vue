@@ -105,7 +105,7 @@
             <h5 class="card-title">{{chosenVersion.price}} PLN</h5>
           </div>
         </div>
-        <button type="button" class="btn btn-success m-1">Buy</button>
+        <button type="button" class="btn btn-success m-1" @click="getToCheckout">Buy</button>
       </div>
     </div>
 
@@ -119,7 +119,8 @@ export default {
     return {
       cars: '',
       chosenVersion: '',
-      chosenConfig: ''
+      chosenConfig: '',
+      loggedUser: ''
     }
   },
   methods: {
@@ -151,9 +152,40 @@ export default {
     },
     setConfig(config) {
       this.chosenConfig = config;
-    }
+    },
+    getToCheckout() {
+      if(this.loggedUser) {
+        this.$router.push({name: 'buyCar', params: { configId: this.chosenConfig.id}})
+      } else {
+        this.$router.push('/login');
+      }
+      
+    },
+    getUserInfo() {
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: this.$userDetailsEndpoint,
+        withCredentials: true,
+        origin: "http://localhost:8080",
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        }
+      };
+      axios.request(config)
+        .then((response) => {
+          this.loggedUser = response.data;
+          return true;
+        })
+        .catch((error) => {
+          console.log(error);
+          return false;
+        });
+    },
   },
   mounted() {
+    this.getUserInfo();
     this.getVersions();         
   }
 }

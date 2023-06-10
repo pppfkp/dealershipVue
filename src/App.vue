@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar bg-body-tertiary sticky-top bg-light">
+  <nav class="navbar bg-body-tertiary sticky-top bg-light mb-3">
     <div class="container-fluid">
       <router-link to="/" class="navbar-brand">BBBauto</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -39,7 +39,7 @@
               to="/orderTable">Orders</router-link>
           </li>
           <li class="nav-item">
-            <router-link v-if="!loggedUser?.is_admin && !loggedUser?.is_customer_service"
+            <router-link v-if="!loggedUser?.is_admin && !loggedUser?.is_customer_service && loggedUser"
               to="/orderCard">Orders</router-link>
           </li>
           <li class="nav-item">

@@ -4,7 +4,7 @@
 
     <div class="card-body">
     <h5 class="card-title">{{manifacturer}} {{model}}</h5>
-    <p class="card-text"> <span style="font-weight: bold;">Price </span> {{price}} PLN</p>
+    <p class="card-text"> <span style="font-weight: bold;">Starting at </span> {{price}} PLN</p>
     </div>
 
     <div class="card-body">

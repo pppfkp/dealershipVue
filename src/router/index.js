@@ -17,6 +17,7 @@ import OrderCardView from "../views/OrderCardView";
 import OrderDetailsView from "../views/OrderDetailsView";
 import CarModelsView from "../views/CarModelsView";
 import VersionDetailView from "../views/VersionDetailsView";
+import BuyCarView from "../views/BuyCarView";
 
 const routes = [
   {
@@ -109,6 +110,11 @@ const routes = [
     path: '/versionDetails/:modelId',
     name: 'versionDetails',
     component: VersionDetailView
+  },
+  {
+    path: '/buyCar/:configId',
+    name: 'buyCar',
+    component: BuyCarView
   }
 ]
 

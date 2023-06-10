@@ -66,14 +66,18 @@
             <div class="d-flex justify-content-center flex-wrap" v-if="loggedUser?.is_admin || loggedUser?.is_customer_service">
                 <h4 class="w-100">Change status</h4>
 
-                <form v-on:submit.prevent="">
-                    <select class="form-select mb-3" required>
+                <form v-on:submit.prevent="changeStatus">
+                    <select class="form-select mb-3"  v-model="orderStatus">
                         <option v-for="status in orderStatuses" :key="status" :value="status.id">
-                            {{ status.name }}
+                            {{ status.name }} 
                         </option>
                     </select>
                     <button class="btn btn-primary mb-3">Change status</button>
                 </form>
+
+                <div class="w-100 d-flex justify-content-center" v-if="loggedUser?.is_admin || loggedUser?.is_customer_service">
+                    <button class="btn btn-danger mb-3" @click="cancelOrder">Cancel order</button>
+                </div>
 
                 <div class="card p-5" v-if="order.user">
                     <h3>{{ order.user.email }}</h3>
@@ -99,7 +103,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Verification failed</h5>
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -126,9 +130,68 @@ export default {
             order: '',
             loggedUser: '',
             orderStatuses: '',
+            orderStatus: ''
         }
     },
     methods: {
+        cancelOrder() {
+            let data = JSON.stringify({
+            });
+
+            let config = {
+                method: 'delete',
+                maxBodyLength: Infinity,
+                withCredentials: true,
+                url: "http://localhost:8000/api/order/"+this.$route.params.orderId,
+                origin: "http://localhost:8080",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                data: data
+            };
+
+
+            axios.request(config)
+                .then((response) => {
+                    console.log(response);
+                    this.$router.push({ name: 'orderTable' });
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+
+        },
+        changeStatus() {
+            let data = JSON.stringify({
+                order_status_id: this.orderStatus
+            });
+
+            let config = {
+                method: 'put',
+                maxBodyLength: Infinity,
+                withCredentials: true,
+                url: "http://localhost:8000/api/order/"+this.order.id,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                data: data
+            };
+
+
+            axios.request(config)
+                .then((response) => {
+                    console.log(JSON.stringify(response));
+                    if (response.status === 200) {
+                        console.log(response.data);
+                        this.$router.go(0);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
         getOrders() {
             let data = JSON.stringify({
             });
@@ -139,7 +202,8 @@ export default {
                 withCredentials: true,
                 url: "http://localhost:8000/api/order/" + this.$route.params.orderId,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
                 data: data
             };
@@ -167,7 +231,8 @@ export default {
                 withCredentials: true,
                 url: "http://localhost:8000/api/orderStatus",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
                 data: data
             };
@@ -221,7 +286,8 @@ export default {
                 withCredentials: true,
                 url: "http://localhost:8000/api/order/help/request",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
                 },
                 data: data
             };
