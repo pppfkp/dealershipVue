@@ -3,7 +3,7 @@
     <img :class="{'scaledUp':isScaledUp}" :src="image" class="card-img-top" alt="..." @click="changePhoto()">
 
     <div class="card-body">
-    <h5 class="card-title">{{manifacturer}} {{model}}</h5>
+    <h5 class="card-title">{{manufacturer}} {{model}}</h5>
     <p class="card-text"> <span style="font-weight: bold;">Starting at </span> {{price}} PLN</p>
     </div>
 
@@ -20,7 +20,7 @@ export default {
         'image2',
         'model',
         'price',
-        'manifacturer',
+        'manufacturer',
         'id'
     ],
     data() {

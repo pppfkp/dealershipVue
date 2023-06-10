@@ -25,13 +25,71 @@
 
         <label class="form-label">Color</label>
         <select class="form-select mb-3" v-model="configurationForm.color" required>
-          <option v-for="color in configurationCreationData.colors" :key="color" :value="color.id">{{ color.name }}</option>
+          <option v-for="color in configurationCreationData.colors" :key="color" :value="color.id">{{ color.name }}
+          </option>
         </select>
 
         <button type="submit" class="btn btn-primary m-1">Submit</button>
       </form>
     </div>
 
+  </div>
+  <!-- Button trigger modal -->
+  <button type="button" id="modalOpenBtn" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+    style="display: none;">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal bg-success fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">New configuration was added</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="w-100">
+            <p></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- Button trigger modal -->
+    <button type="button" id="errorModalOpenBtn" class="btn btn-primary" data-toggle="modal" data-target="#errorModal"
+    style="display: none;">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal bg-danger fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Error ocurred</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="w-100">
+            <p v-for="error in errors" :key="error"></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
   
@@ -40,6 +98,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      errors: [],
       configurationCreationData: '',
       configurationForm: {
         imageFront: '',
@@ -57,7 +116,7 @@ export default {
       fd.append('color_id', this.configurationForm.color);
       fd.append('front_image', this.configurationForm.imageFront);
       fd.append('back_image', this.configurationForm.imageBack);
-       console.log(fd.get('version_id'));
+      console.log(fd.get('version_id'));
 
       let config = {
         maxBodyLength: Infinity,
@@ -69,19 +128,24 @@ export default {
       };
 
 
-      axios.post("http://localhost:8000/api/carConfiguration", fd, {withCredentials: true}, {        headers: {
+      axios.post("http://localhost:8000/api/carConfiguration", fd, { withCredentials: true }, {
+        headers: {
           'Content-Type': 'multipart/form-data',
           'Access-Control-Allow-Origin': '*'
-        }})
+        }
+      })
         .then((response) => {
           console.log(JSON.stringify(response));
           if (response.status === 200) {
             console.log(response.data);
-            // document.getElementById('modalOpenBtn').click();
-            // this.$router.push('/carModels');
+            document.getElementById('modalOpenBtn').click();
+            this.$router.push('/carModels');
           }
         })
         .catch((error) => {
+          this.errors = [];
+          this.errors = error.response.data.errors;
+          document.getElementById('errorModalOpenBtn').click();
           console.log(error);
         })
     },

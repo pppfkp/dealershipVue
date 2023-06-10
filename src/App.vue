@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar bg-body-tertiary sticky-top bg-light mb-3">
     <div class="container-fluid">
-      <router-link to="/" class="navbar-brand">BBBauto</router-link>
+      <router-link to="/carModels" class="navbar-brand">BBBauto</router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
         aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="">Menu</span>
